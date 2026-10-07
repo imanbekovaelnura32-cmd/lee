@@ -24,6 +24,7 @@
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+      perspective: 1000px; /* Для 3D-пространства */
     }
 
     #particleCanvas {
@@ -125,20 +126,46 @@
       letter-spacing: 0.5px;
     }
 
+    /* 3D LUXURY CARD */
+    .card-wrapper {
+      perspective: 1000px;
+      width: 100%;
+      max-width: 480px;
+      z-index: 2;
+    }
+
     .card {
       background: rgba(18, 18, 22, 0.85);
       padding: 45px 35px;
       border-radius: 16px;
-      max-width: 480px;
       width: 100%;
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(12px);
-      z-index: 2;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+    }
+
+    /* Золотой блик поверх карточки */
+    .card-flare {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.18), transparent 60%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
     }
 
     .form-group {
       margin-bottom: 24px;
+      position: relative;
+      z-index: 2;
     }
     label {
       display: block;
@@ -185,6 +212,8 @@
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
     }
     button[type="submit"]:hover {
       background: #d4af37;
@@ -206,6 +235,8 @@
       letter-spacing: 1px;
       font-family: 'Playfair Display', serif;
       animation: fadeIn 0.5s ease;
+      position: relative;
+      z-index: 2;
     }
 
     @keyframes fadeIn {
@@ -227,7 +258,7 @@
     <span id="audioIcon">🔇</span> <span id="audioText">SOUND: OFF</span>
   </button>
 
-  <!-- Reliable Jazz Audio Link -->
+  <!-- Background Jazz Audio -->
   <audio id="bgMusic" loop preload="auto">
     <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
   </audio>
@@ -239,45 +270,49 @@
     <p>Please enter your information to submit the record.</p>
   </header>
 
-  <!-- Dark Card -->
-  <div class="card">
-    <form id="userForm" action="https://formspree.io/f/xyekkppj" method="POST">
-      
-      <div class="form-group">
-        <label for="fullName">Full Name *</label>
-        <input type="text" id="fullName" name="Full Name" placeholder="e.g. Eleanor Vance" required>
+  <!-- 3D Card Container -->
+  <div class="card-wrapper">
+    <div class="card" id="tiltCard">
+      <div class="card-flare" id="cardFlare"></div>
+
+      <form id="userForm" action="https://formspree.io/f/xyekkppj" method="POST">
+        
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" name="Full Name" placeholder="e.g. Eleanor Vance" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="Email" placeholder="eleanor@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="Phone" placeholder="+1 (555) 000-0000">
+        </div>
+
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="Age" min="1" max="120" placeholder="e.g. 19">
+        </div>
+
+        <div class="form-group">
+          <label for="education">Educational Institution</label>
+          <input type="text" id="education" name="Educational Institution" placeholder="e.g. Columbia University / High School">
+        </div>
+
+        <div class="form-group">
+          <label for="comment">Notes / Additional Info</label>
+          <textarea id="comment" name="Notes" rows="3" placeholder="Enter details..."></textarea>
+        </div>
+
+        <button type="submit">Submit Application</button>
+      </form>
+
+      <div id="successMessage" class="result">
+        ✦ Application successfully submitted
       </div>
-
-      <div class="form-group">
-        <label for="email">Email Address *</label>
-        <input type="email" id="email" name="Email" placeholder="eleanor@example.com" required>
-      </div>
-
-      <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" name="Phone" placeholder="+1 (555) 000-0000">
-      </div>
-
-      <div class="form-group">
-        <label for="age">Age</label>
-        <input type="number" id="age" name="Age" min="1" max="120" placeholder="e.g. 19">
-      </div>
-
-      <div class="form-group">
-        <label for="education">Educational Institution</label>
-        <input type="text" id="education" name="Educational Institution" placeholder="e.g. Columbia University / High School">
-      </div>
-
-      <div class="form-group">
-        <label for="comment">Notes / Additional Info</label>
-        <textarea id="comment" name="Notes" rows="3" placeholder="Enter details..."></textarea>
-      </div>
-
-      <button type="submit">Submit Application</button>
-    </form>
-
-    <div id="successMessage" class="result">
-      ✦ Application successfully submitted
     </div>
   </div>
 
@@ -324,7 +359,49 @@
     }
     animateParticles();
 
-    // --- 2. LOCAL STORAGE (DRAFT SAVER) ---
+    // --- 2. 3D TILT & FLARE EFFECT ---
+    const tiltCard = document.getElementById('tiltCard');
+    const cardFlare = document.getElementById('cardFlare');
+
+    function triggerHaptic() {
+      if (navigator.vibrate) navigator.vibrate(12); // Микро-вибрация
+    }
+
+    function handleMove(clientX, clientY) {
+      const rect = tiltCard.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -10; // Угол наклона по X
+      const rotateY = ((x - centerX) / centerX) * 10;  // Угол наклона по Y
+
+      tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      
+      cardFlare.style.opacity = '1';
+      cardFlare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(212, 175, 55, 0.22), transparent 70%)`;
+    }
+
+    function handleReset() {
+      tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      cardFlare.style.opacity = '0';
+    }
+
+    // Для мыши
+    tiltCard.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+    tiltCard.addEventListener('mouseleave', handleReset);
+
+    // Для сенсорных экранов смартфонов
+    tiltCard.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+    tiltCard.addEventListener('touchend', handleReset);
+
+    // --- 3. LOCAL STORAGE (DRAFT SAVER) ---
     const form = document.getElementById('userForm');
     const toast = document.getElementById('toast');
     const formFields = form.querySelectorAll('input, textarea');
@@ -359,7 +436,7 @@
       }
     });
 
-    // --- 3. AUDIO & SOUNDS ---
+    // --- 4. AUDIO & SOUNDS ---
     let audioCtx = null;
     let isSoundOn = false;
     const bgMusic = document.getElementById('bgMusic');
@@ -403,6 +480,7 @@
 
     const audioBtn = document.getElementById('audioToggle');
     audioBtn.addEventListener('click', () => {
+      triggerHaptic();
       initAudio();
       isSoundOn = !isSoundOn;
 
@@ -410,8 +488,6 @@
         document.getElementById('audioIcon').textContent = '🎷';
         document.getElementById('audioText').textContent = 'JAZZ: ON';
         audioBtn.style.borderColor = '#d4af37';
-        
-        // Попытка запуска с обработкой возможных ошибок
         bgMusic.play().catch(e => console.log("Audio play error:", e));
         playClickSound();
       } else {
@@ -423,15 +499,16 @@
     });
 
     document.querySelectorAll('input, textarea, button').forEach(element => {
-      element.addEventListener('focus', playClickSound);
-      element.addEventListener('click', playClickSound);
+      element.addEventListener('focus', () => { playClickSound(); triggerHaptic(); });
+      element.addEventListener('click', () => { playClickSound(); triggerHaptic(); });
     });
 
-    // --- 4. FORM HANDLER ---
+    // --- 5. FORM HANDLER ---
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      triggerHaptic();
       const data = new FormData(event.target);
       
       const response = await fetch(event.target.action, {
