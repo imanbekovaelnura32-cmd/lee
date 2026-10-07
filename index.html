@@ -1,107 +1,200 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Анкета пользователя</title>
+  <title>Personal Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      color: #333;
-      padding: 20px;
-      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0b0d;
+      color: #e5e5e5;
+      padding: 50px 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background-image: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 70%);
     }
-    .card {
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 12px;
-      max-width: 400px;
-      width: 100%;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      margin-top: 0;
-      color: #1f2937;
+
+    /* Luxury Header */
+    header {
       text-align: center;
+      margin-bottom: 45px;
+      max-width: 500px;
+    }
+    header .step-tag {
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 11px;
+      color: #a39382;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 400;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    header h1 i {
+      font-style: italic;
+      color: #d4af37;
+      font-weight: 400;
+    }
+    header p {
+      font-size: 13px;
+      color: #8c8c8c;
+      margin-top: 12px;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    /* Dark Luxury Card */
+    .card {
+      background: rgba(18, 18, 22, 0.8);
+      padding: 45px 35px;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 24px;
     }
     label {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 14px;
-      color: #4b5563;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #a39382;
+      margin-bottom: 8px;
+      font-weight: 500;
     }
-    input, select, textarea {
+    input, textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 15px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: rgba(255, 255, 255, 0.03);
+      color: #ffffff;
+      transition: all 0.3s ease;
     }
-    input:focus, select:focus, textarea:focus {
+    input:focus, textarea:focus {
       outline: none;
-      border-color: #2563eb;
+      border-color: #d4af37;
+      background-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
     }
+    input::placeholder, textarea::placeholder {
+      color: #55555e;
+      font-weight: 300;
+    }
+
+    /* Button */
     button {
       width: 100%;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      padding: 12px;
-      margin-top: 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 6px;
+      background: linear-gradient(135deg, #2a2a30 0%, #151518 100%);
+      color: #ffffff;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      padding: 16px;
+      margin-top: 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-weight: 500;
+      border-radius: 8px;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
     button:hover {
-      background-color: #1d4ed8;
+      background: #d4af37;
+      color: #0b0b0d;
+      border-color: #d4af37;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
     }
+
+    /* Success Message */
     .result {
-      margin-top: 20px;
-      padding: 12px;
-      background: #ecfdf5;
-      border: 1px solid #10b981;
-      color: #065f46;
-      border-radius: 6px;
+      margin-top: 24px;
+      padding: 16px;
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #d4af37;
+      border-radius: 8px;
       display: none;
       text-align: center;
-      font-weight: bold;
+      font-size: 13px;
+      letter-spacing: 1px;
+      font-family: 'Playfair Display', serif;
     }
   </style>
 </head>
 <body>
 
+  <!-- Chic Header -->
+  <header>
+    <span class="step-tag">— STEP 01 —</span>
+    <h1>Personal <i>&</i> Educational Profile</h1>
+    <p>Please enter your information to submit the record.</p>
+  </header>
+
+  <!-- Dark Card -->
   <div class="card">
-    <h2>Заполните анкету</h2>
     <form id="userForm">
-      <label for="fullName">ФИО *</label>
-      <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
+      
+      <div class="form-group">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" placeholder="e.g. Eleanor Vance" required>
+      </div>
 
-      <label for="email">Электронная почта (Email) *</label>
-      <input type="email" id="email" placeholder="example@mail.com" required>
+      <div class="form-group">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" placeholder="eleanor@example.com" required>
+      </div>
 
-      <label for="phone">Номер телефона</label>
-      <input type="tel" id="phone" placeholder="+7 (999) 000-00-00">
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
+      </div>
 
-      <label for="birthdate">Дата рождения</label>
-      <input type="date" id="birthdate">
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" min="1" max="120" placeholder="e.g. 19">
+      </div>
 
-      <label for="comment">О себе / Комментарий</label>
-      <textarea id="comment" rows="3" placeholder="Расскажите немного о себе..."></textarea>
+      <div class="form-group">
+        <label for="education">Educational Institution</label>
+        <input type="text" id="education" placeholder="e.g. Columbia University / High School">
+      </div>
 
-      <button type="submit">Отправить данные</button>
+      <div class="form-group">
+        <label for="comment">Notes / Additional Info</label>
+        <textarea id="comment" rows="3" placeholder="Enter details..."></textarea>
+      </div>
+
+      <button type="submit">Submit Application</button>
     </form>
 
     <div id="successMessage" class="result">
-      ✅ Данные успешно отправлены!
+      ✦ Application successfully submitted
     </div>
   </div>
 
@@ -110,15 +203,11 @@
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', (event) => {
-      event.preventDefault(); // Предотвращаем перезагрузку страницы
+      event.preventDefault();
 
-      // Показываем сообщение об успешной отправке
       successMessage.style.display = 'block';
-
-      // Очищаем форму
       form.reset();
 
-      // Прячем сообщение через 4 секунды
       setTimeout(() => {
         successMessage.style.display = 'none';
       }, 4000);
