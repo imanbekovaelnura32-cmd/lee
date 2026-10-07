@@ -158,36 +158,36 @@
 
   <!-- Dark Card -->
   <div class="card">
-    <form id="userForm">
+    <form id="userForm" action="https://formspree.io/f/xyekkppj" method="POST">
       
       <div class="form-group">
         <label for="fullName">Full Name *</label>
-        <input type="text" id="fullName" placeholder="e.g. Eleanor Vance" required>
+        <input type="text" id="fullName" name="Full Name" placeholder="e.g. Eleanor Vance" required>
       </div>
 
       <div class="form-group">
         <label for="email">Email Address *</label>
-        <input type="email" id="email" placeholder="eleanor@example.com" required>
+        <input type="email" id="email" name="Email" placeholder="eleanor@example.com" required>
       </div>
 
       <div class="form-group">
         <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
+        <input type="tel" id="phone" name="Phone" placeholder="+1 (555) 000-0000">
       </div>
 
       <div class="form-group">
         <label for="age">Age</label>
-        <input type="number" id="age" min="1" max="120" placeholder="e.g. 19">
+        <input type="number" id="age" name="Age" min="1" max="120" placeholder="e.g. 19">
       </div>
 
       <div class="form-group">
         <label for="education">Educational Institution</label>
-        <input type="text" id="education" placeholder="e.g. Columbia University / High School">
+        <input type="text" id="education" name="Educational Institution" placeholder="e.g. Columbia University / High School">
       </div>
 
       <div class="form-group">
         <label for="comment">Notes / Additional Info</label>
-        <textarea id="comment" rows="3" placeholder="Enter details..."></textarea>
+        <textarea id="comment" name="Notes" rows="3" placeholder="Enter details..."></textarea>
       </div>
 
       <button type="submit">Submit Application</button>
@@ -202,15 +202,27 @@
     const form = document.getElementById('userForm');
     const successMessage = document.getElementById('successMessage');
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      const data = new FormData(event.target);
+      
+      const response = await fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+      });
 
-      successMessage.style.display = 'block';
-      form.reset();
-
-      setTimeout(() => {
-        successMessage.style.display = 'none';
-      }, 4000);
+      if (response.ok) {
+        successMessage.style.display = 'block';
+        form.reset();
+        setTimeout(() => {
+          successMessage.style.display = 'none';
+        }, 5000);
+      } else {
+        alert("Oops! There was a problem submitting your form");
+      }
     });
   </script>
 
