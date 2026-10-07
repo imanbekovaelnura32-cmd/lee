@@ -7,6 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- Supabase JS Client SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -236,7 +240,6 @@
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
     }
 
-    /* FRONT FACE */
     .vip-front {
       background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.15), rgba(18, 18, 22, 0.98));
     }
@@ -286,7 +289,6 @@
       text-transform: uppercase;
     }
 
-    /* BACK FACE */
     .vip-back {
       background: radial-gradient(circle at bottom right, rgba(212, 175, 55, 0.15), rgba(12, 12, 15, 0.98));
       transform: rotateY(180deg);
@@ -342,7 +344,6 @@
       opacity: 0.8;
     }
 
-    /* Luxe Footer Author */
     footer {
       margin-top: 40px;
       text-align: center;
@@ -373,10 +374,8 @@
 </head>
 <body>
 
-  <!-- Background Particles -->
   <canvas id="particleCanvas"></canvas>
 
-  <!-- Audio Toggle -->
   <button id="audioToggle" class="audio-control">
     <span id="audioIcon">🔇</span> <span id="audioText">SOUND: OFF</span>
   </button>
@@ -384,7 +383,6 @@
     <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Header -->
   <header>
     <span class="step-tag">— PRIVILEGE MEMBERSHIP —</span>
     <h1>Personal <i>&</i> Vision Application</h1>
@@ -393,7 +391,6 @@
   <div class="card-container">
     
     <div class="card" id="formCard">
-      <!-- Progress Indicator -->
       <div class="progress-container" id="progressBox">
         <div class="progress-labels">
           <span id="stepCounter">STEP 01 / 04</span>
@@ -404,18 +401,17 @@
         </div>
       </div>
 
-      <!-- Form Steps -->
-      <form id="userForm" action="https://formspree.io/f/xyekkppj" method="POST">
+      <form id="userForm">
         
         <!-- STEP 1 -->
         <div class="step-content active" data-step="1">
           <div class="form-group">
             <label for="fullName">01. Full Name *</label>
-            <input type="text" id="fullName" name="Full Name" placeholder="e.g. Eleanor Vance" required>
+            <input type="text" id="fullName" placeholder="e.g. Eleanor Vance" required>
           </div>
           <div class="form-group">
             <label for="email">02. Email Address *</label>
-            <input type="email" id="email" name="Email" placeholder="eleanor@example.com" required>
+            <input type="email" id="email" placeholder="eleanor@example.com" required>
           </div>
         </div>
 
@@ -423,31 +419,30 @@
         <div class="step-content" data-step="2">
           <div class="form-group">
             <label for="phone">03. Phone Number</label>
-            <input type="tel" id="phone" name="Phone" placeholder="+1 (555) 000-0000">
+            <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
           </div>
           <div class="form-group">
-            <label for="age">04. Age</label>
-            <input type="number" id="age" name="Age" min="1" max="120" placeholder="e.g. 19">
+            <label for="education">04. Educational Institution / Company</label>
+            <input type="text" id="education" placeholder="e.g. Columbia University">
           </div>
         </div>
 
         <!-- STEP 3 -->
         <div class="step-content" data-step="3">
           <div class="form-group">
-            <label for="education">05. Educational Institution / Company</label>
-            <input type="text" id="education" name="Educational Institution" placeholder="e.g. Columbia University">
+            <label for="comment">05. Personal Vision & Goals</label>
+            <textarea id="comment" rows="4" placeholder="Share your key goals or details..."></textarea>
           </div>
         </div>
 
         <!-- STEP 4 -->
         <div class="step-content" data-step="4">
-          <div class="form-group">
-            <label for="comment">06. Personal Vision & Goals</label>
-            <textarea id="comment" name="Notes" rows="4" placeholder="Share your key goals or details..."></textarea>
+          <div style="text-align: center; padding: 20px 0;">
+            <p style="font-size: 12px; color: #d4af37; letter-spacing: 2px; text-transform: uppercase;">✦ Ready to Issue VIP Pass ✦</p>
+            <p style="font-size: 11px; color: #8c8c8c; margin-top: 8px;">Click complete to register record into cloud database.</p>
           </div>
         </div>
 
-        <!-- Step Navigation Controls -->
         <div class="nav-buttons" id="navButtons">
           <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Back</button>
           <button type="button" class="btn btn-primary" id="nextBtn">Continue</button>
@@ -502,13 +497,17 @@
 
   </div>
 
-  <!-- Author Footer -->
   <footer>
     Designed & Developed by <span>Ellé Ymanbekova</span> ✦
   </footer>
 
   <script>
-    // --- 1. PARTICLES ---
+    // --- 1. SUPABASE INITIALIZATION ---
+    const SUPABASE_URL = "https://scqpgghkresytwzlwxbc.supabase.co";
+    const SUPABASE_KEY = "Sb_publishable_UjTLLZBzydjHwtQgY8CXRQ_aj9FFRrt"; 
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // --- 2. PARTICLES ---
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -548,7 +547,7 @@
     }
     animateParticles();
 
-    // --- 2. AUDIO & SOUND EFFECTS ---
+    // --- 3. AUDIO & SOUND EFFECTS ---
     let audioCtx = null;
     let isSoundOn = false;
     const bgMusic = document.getElementById('bgMusic');
@@ -606,7 +605,7 @@
       }
     });
 
-    // --- 3. STEP SYSTEM & PROGRESS BAR ---
+    // --- 4. STEP SYSTEM & PROGRESS BAR ---
     let currentStep = 1;
     const totalSteps = 4;
 
@@ -673,7 +672,7 @@
       }
     });
 
-    // --- 4. FORM SUBMIT & 3D VIP PASS FLIP ---
+    // --- 5. SUPABASE REALTIME SUBMIT ---
     const form = document.getElementById('userForm');
     const formCard = document.getElementById('formCard');
     const vipCardWrapper = document.getElementById('vipCardWrapper');
@@ -688,27 +687,45 @@
       triggerHaptic();
 
       const fullNameVal = document.getElementById('fullName').value || 'Eleanor Vance';
-      const data = new FormData(event.target);
+      const emailVal = document.getElementById('email').value || '';
+      const phoneVal = document.getElementById('phone').value || '';
+      const educationVal = document.getElementById('education').value || '';
+      const notesVal = document.getElementById('comment').value || '';
+      const generatedVipId = '#' + Math.floor(100000 + Math.random() * 900000);
 
-      const response = await fetch(event.target.action, {
-        method: form.method,
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
+      submitBtn.textContent = 'SAVING TO CLOUD...';
+      submitBtn.disabled = true;
 
-      if (response.ok) {
+      // Direct write to Supabase Database
+      const { data, error } = await _supabase
+        .from('vip_members')
+        .insert([
+          { 
+            full_name: fullNameVal, 
+            email: emailVal,
+            phone: phoneVal,
+            education: educationVal,
+            notes: notesVal,
+            vip_id: generatedVipId
+          }
+        ]);
+
+      if (!error) {
         playSuccessChord();
         formCard.style.display = 'none';
 
         vipName.textContent = fullNameVal;
-        vipId.textContent = '#' + Math.floor(100000 + Math.random() * 900000);
+        vipId.textContent = generatedVipId;
         
         const now = new Date();
         vipDate.textContent = now.toLocaleString('en-US', { month: 'short' }).toUpperCase() + ' ' + now.getFullYear();
 
         vipCardWrapper.style.display = 'block';
       } else {
-        alert("Oops! There was a problem submitting your form");
+        console.error("Supabase Error:", error);
+        alert("Error saving record: " + error.message);
+        submitBtn.textContent = 'Complete Record';
+        submitBtn.disabled = false;
       }
     });
 
