@@ -26,7 +26,6 @@
       overflow-x: hidden;
     }
 
-    /* Particles Background Canvas */
     #particleCanvas {
       position: fixed;
       top: 0;
@@ -35,6 +34,32 @@
       height: 100%;
       pointer-events: none;
       z-index: 1;
+    }
+
+    /* Draft Restore Toast Notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(18, 18, 22, 0.95);
+      border: 1px solid #d4af37;
+      color: #d4af37;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* Sound Control Button */
@@ -63,7 +88,6 @@
       box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
     }
 
-    /* Luxury Header */
     header {
       text-align: center;
       margin-bottom: 45px;
@@ -101,7 +125,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Dark Luxury Card */
     .card {
       background: rgba(18, 18, 22, 0.85);
       padding: 45px 35px;
@@ -114,7 +137,6 @@
       z-index: 2;
     }
 
-    /* Form Fields */
     .form-group {
       margin-bottom: 24px;
     }
@@ -149,7 +171,6 @@
       font-weight: 300;
     }
 
-    /* Button */
     button[type="submit"] {
       width: 100%;
       background: linear-gradient(135deg, #2a2a30 0%, #151518 100%);
@@ -172,7 +193,6 @@
       box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
     }
 
-    /* Success Message */
     .result {
       margin-top: 24px;
       padding: 16px;
@@ -196,6 +216,9 @@
 </head>
 <body>
 
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">✦ Draft automatically restored</div>
+
   <!-- Particles Background -->
   <canvas id="particleCanvas"></canvas>
 
@@ -209,7 +232,7 @@
     <source src="https://cdn.pixabay.com/download/audio/2022/11/06/audio_40446b52a5.mp3?filename=smooth-jazz-125345.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Chic Header -->
+  <!-- Header -->
   <header>
     <span class="step-tag">— STEP 01 —</span>
     <h1>Personal <i>&</i> Educational Profile</h1>
@@ -259,7 +282,7 @@
   </div>
 
   <script>
-    // --- 1. GOLDEN PARTICLES CANVAS ---
+    // --- 1. PARTICLES CANVAS ---
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -272,9 +295,7 @@
     resizeCanvas();
 
     class Particle {
-      constructor() {
-        this.reset();
-      }
+      constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
@@ -284,10 +305,7 @@
       }
       update() {
         this.y += this.speedY;
-        if (this.y < 0) {
-          this.y = canvas.height;
-          this.x = Math.random() * canvas.width;
-        }
+        if (this.y < 0) { this.y = canvas.height; this.x = Math.random() * canvas.width; }
       }
       draw() {
         ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
@@ -297,33 +315,61 @@
       }
     }
 
-    for (let i = 0; i < 45; i++) {
-      particles.push(new Particle());
-    }
+    for (let i = 0; i < 45; i++) particles.push(new Particle());
 
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
+      particles.forEach(p => { p.update(); p.draw(); });
       requestAnimationFrame(animateParticles);
     }
     animateParticles();
 
-    // --- 2. AUDIO & TACTILE SOUNDS ---
+    // --- 2. LOCAL STORAGE (DRAFT SAVER) ---
+    const form = document.getElementById('userForm');
+    const toast = document.getElementById('toast');
+    const formFields = form.querySelectorAll('input, textarea');
+
+    // Сохранение данных в памяти браузера при каждом вводе символа
+    formFields.forEach(field => {
+      field.addEventListener('input', () => {
+        const formData = {};
+        formFields.forEach(f => {
+          if (f.id) formData[f.id] = f.value;
+        });
+        localStorage.setItem('luxFormDraft', JSON.stringify(formData));
+      });
+    });
+
+    // Восстановление данных при загрузке страницы
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedDraft = localStorage.getItem('luxFormDraft');
+      if (savedDraft) {
+        const formData = JSON.parse(savedDraft);
+        let hasData = false;
+
+        formFields.forEach(field => {
+          if (field.id && formData[field.id]) {
+            field.value = formData[field.id];
+            hasData = true;
+          }
+        });
+
+        if (hasData) {
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+      }
+    });
+
+    // --- 3. AUDIO & SOUNDS ---
     let audioCtx = null;
     let isSoundOn = false;
     const bgMusic = document.getElementById('bgMusic');
-    bgMusic.volume = 0.35; // Комфортная громкость
+    bgMusic.volume = 0.35;
 
     function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function playClickSound() {
@@ -357,24 +403,20 @@
       });
     }
 
-    // Toggle Button
     const audioBtn = document.getElementById('audioToggle');
-    const audioIcon = document.getElementById('audioIcon');
-    const audioText = document.getElementById('audioText');
-
     audioBtn.addEventListener('click', () => {
       initAudio();
       isSoundOn = !isSoundOn;
 
       if (isSoundOn) {
-        audioIcon.textContent = '🎷';
-        audioText.textContent = 'JAZZ: ON';
+        document.getElementById('audioIcon').textContent = '🎷';
+        document.getElementById('audioText').textContent = 'JAZZ: ON';
         audioBtn.style.borderColor = '#d4af37';
         bgMusic.play().catch(() => {});
         playClickSound();
       } else {
-        audioIcon.textContent = '🔇';
-        audioText.textContent = 'SOUND: OFF';
+        document.getElementById('audioIcon').textContent = '🔇';
+        document.getElementById('audioText').textContent = 'SOUND: OFF';
         audioBtn.style.borderColor = 'rgba(212, 175, 55, 0.3)';
         bgMusic.pause();
       }
@@ -385,8 +427,7 @@
       element.addEventListener('click', playClickSound);
     });
 
-    // --- 3. FORM HANDLER ---
-    const form = document.getElementById('userForm');
+    // --- 4. FORM HANDLER ---
     const successMessage = document.getElementById('successMessage');
 
     form.addEventListener('submit', async (event) => {
@@ -405,6 +446,10 @@
         playSuccessChord();
         successMessage.style.display = 'block';
         form.reset();
+        
+        // Очищаем черновик из памяти после успешной отправки
+        localStorage.removeItem('luxFormDraft');
+
         setTimeout(() => {
           successMessage.style.display = 'none';
         }, 5000);
