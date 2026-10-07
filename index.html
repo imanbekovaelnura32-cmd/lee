@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анкета пользователя</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      color: #333;
+      padding: 20px;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .card {
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-top: 0;
+      color: #1f2937;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #4b5563;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+    button {
+      width: 100%;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 12px;
+      background: #ecfdf5;
+      border: 1px solid #10b981;
+      color: #065f46;
+      border-radius: 6px;
+      display: none;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Заполните анкету</h2>
+    <form id="userForm">
+      <label for="fullName">ФИО *</label>
+      <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
+
+      <label for="email">Электронная почта (Email) *</label>
+      <input type="email" id="email" placeholder="example@mail.com" required>
+
+      <label for="phone">Номер телефона</label>
+      <input type="tel" id="phone" placeholder="+7 (999) 000-00-00">
+
+      <label for="birthdate">Дата рождения</label>
+      <input type="date" id="birthdate">
+
+      <label for="comment">О себе / Комментарий</label>
+      <textarea id="comment" rows="3" placeholder="Расскажите немного о себе..."></textarea>
+
+      <button type="submit">Отправить данные</button>
+    </form>
+
+    <div id="successMessage" class="result">
+      ✅ Данные успешно отправлены!
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('userForm');
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+      // Показываем сообщение об успешной отправке
+      successMessage.style.display = 'block';
+
+      // Очищаем форму
+      form.reset();
+
+      // Прячем сообщение через 4 секунды
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 4000);
+    });
+  </script>
+
+</body>
+</html>
