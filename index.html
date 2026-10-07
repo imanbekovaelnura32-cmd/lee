@@ -204,9 +204,9 @@
     <span id="audioIcon">🔇</span> <span id="audioText">SOUND: OFF</span>
   </button>
 
-  <!-- Background Piano Audio -->
+  <!-- Background Jazz Audio -->
   <audio id="bgMusic" loop preload="auto">
-    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=soft-piano-112282.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/download/audio/2022/11/06/audio_40446b52a5.mp3?filename=smooth-jazz-125345.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Chic Header -->
@@ -315,7 +315,7 @@
     let audioCtx = null;
     let isSoundOn = false;
     const bgMusic = document.getElementById('bgMusic');
-    bgMusic.volume = 0.35; // Мягкая комфортная громкость
+    bgMusic.volume = 0.35; // Комфортная громкость
 
     function initAudio() {
       if (!audioCtx) {
@@ -367,8 +367,8 @@
       isSoundOn = !isSoundOn;
 
       if (isSoundOn) {
-        audioIcon.textContent = '🎼';
-        audioText.textContent = 'MUSIC: ON';
+        audioIcon.textContent = '🎷';
+        audioText.textContent = 'JAZZ: ON';
         audioBtn.style.borderColor = '#d4af37';
         bgMusic.play().catch(() => {});
         playClickSound();
