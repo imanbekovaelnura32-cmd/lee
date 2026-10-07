@@ -23,6 +23,31 @@
       align-items: center;
       min-height: 100vh;
       background-image: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 70%);
+      position: relative;
+    }
+
+    /* Sound Control Button */
+    .audio-control {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #d4af37;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .audio-control:hover {
+      background: rgba(212, 175, 55, 0.1);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
     }
 
     /* Luxury Header */
@@ -30,6 +55,7 @@
       text-align: center;
       margin-bottom: 45px;
       max-width: 500px;
+      margin-top: 20px;
     }
     header .step-tag {
       text-transform: uppercase;
@@ -109,7 +135,7 @@
     }
 
     /* Button */
-    button {
+    button[type="submit"] {
       width: 100%;
       background: linear-gradient(135deg, #2a2a30 0%, #151518 100%);
       color: #ffffff;
@@ -124,7 +150,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    button:hover {
+    button[type="submit"]:hover {
       background: #d4af37;
       color: #0b0b0d;
       border-color: #d4af37;
@@ -148,6 +174,11 @@
   </style>
 </head>
 <body>
+
+  <!-- Audio Toggle Button -->
+  <button id="audioToggle" class="audio-control">
+    <span id="audioIcon">🔇</span> <span id="audioText">SOUND: OFF</span>
+  </button>
 
   <!-- Chic Header -->
   <header>
@@ -199,6 +230,106 @@
   </div>
 
   <script>
+    // --- Audio System (Web Audio API) ---
+    let audioCtx = null;
+    let isSoundOn = false;
+    let bgOscillator = null;
+    let bgGain = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    // Click Sound
+    function playClickSound() {
+      if (!isSoundOn || !audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.05);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    // Success Fanfare Sound
+    function playSuccessSound() {
+      if (!isSoundOn || !audioCtx) return;
+      const notes = [261.63, 329.63, 392.00, 523.25]; // C E G C
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime + idx * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.1 + 0.6);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + idx * 0.1);
+        osc.stop(audioCtx.currentTime + idx * 0.1 + 0.6);
+      });
+    }
+
+    // Background Ambient Sound
+    function startAmbient() {
+      if (!audioCtx) return;
+      bgOscillator = audioCtx.createOscillator();
+      bgGain = audioCtx.createGain();
+      bgOscillator.type = 'sine';
+      bgOscillator.frequency.value = 110; // Low A note
+      bgGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+      bgOscillator.connect(bgGain);
+      bgGain.connect(audioCtx.destination);
+      bgOscillator.start();
+    }
+
+    function stopAmbient() {
+      if (bgOscillator) {
+        bgOscillator.stop();
+        bgOscillator = null;
+      }
+    }
+
+    // Toggle Audio Button
+    const audioBtn = document.getElementById('audioToggle');
+    const audioIcon = document.getElementById('audioIcon');
+    const audioText = document.getElementById('audioText');
+
+    audioBtn.addEventListener('click', () => {
+      initAudio();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      isSoundOn = !isSoundOn;
+
+      if (isSoundOn) {
+        audioIcon.textContent = '🔊';
+        audioText.textContent = 'SOUND: ON';
+        audioBtn.style.borderColor = '#d4af37';
+        startAmbient();
+        playClickSound();
+      } else {
+        audioIcon.textContent = '🔇';
+        audioText.textContent = 'SOUND: OFF';
+        audioBtn.style.borderColor = 'rgba(212, 175, 55, 0.3)';
+        stopAmbient();
+      }
+    });
+
+    // Add click audio to all inputs
+    document.querySelectorAll('input, textarea, button').forEach(element => {
+      element.addEventListener('focus', playClickSound);
+      element.addEventListener('click', playClickSound);
+    });
+
+    // --- Form Handler ---
     const form = document.getElementById('userForm');
     const successMessage = document.getElementById('successMessage');
 
@@ -215,6 +346,7 @@
       });
 
       if (response.ok) {
+        playSuccessSound();
         successMessage.style.display = 'block';
         form.reset();
         setTimeout(() => {
