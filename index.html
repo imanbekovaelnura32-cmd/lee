@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Application</title>
+  <title>VIP Application — Luxury Standard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -17,14 +17,13 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #0b0b0d;
       color: #e5e5e5;
-      padding: 50px 20px;
+      padding: 40px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
-      perspective: 1000px; /* Для 3D-пространства */
     }
 
     #particleCanvas {
@@ -37,33 +36,7 @@
       z-index: 1;
     }
 
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-20px);
-      background: rgba(18, 18, 22, 0.95);
-      border: 1px solid #d4af37;
-      color: #d4af37;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
-      backdrop-filter: blur(8px);
-      z-index: 200;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.4s ease;
-    }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* Sound Control Button */
+    /* Top Sound Control */
     .audio-control {
       position: absolute;
       top: 20px;
@@ -84,14 +57,10 @@
       z-index: 100;
       backdrop-filter: blur(5px);
     }
-    .audio-control:hover {
-      background: rgba(212, 175, 55, 0.1);
-      box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
-    }
 
     header {
       text-align: center;
-      margin-bottom: 45px;
+      margin-bottom: 25px;
       max-width: 500px;
       margin-top: 20px;
       z-index: 2;
@@ -99,73 +68,76 @@
     header .step-tag {
       text-transform: uppercase;
       letter-spacing: 4px;
-      font-size: 11px;
+      font-size: 10px;
       color: #a39382;
-      font-weight: 500;
       display: block;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 42px;
+      font-size: 38px;
       font-weight: 400;
       color: #ffffff;
-      letter-spacing: -0.5px;
       line-height: 1.2;
     }
     header h1 i {
       font-style: italic;
       color: #d4af37;
-      font-weight: 400;
-    }
-    header p {
-      font-size: 13px;
-      color: #8c8c8c;
-      margin-top: 12px;
-      font-weight: 300;
-      letter-spacing: 0.5px;
     }
 
-    /* 3D LUXURY CARD */
-    .card-wrapper {
-      perspective: 1000px;
-      width: 100%;
-      max-width: 480px;
-      z-index: 2;
-    }
-
+    /* Container Card */
     .card {
-      background: rgba(18, 18, 22, 0.85);
-      padding: 45px 35px;
+      background: rgba(18, 18, 22, 0.9);
+      padding: 40px 30px;
       border-radius: 16px;
+      max-width: 480px;
       width: 100%;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(12px);
+      z-index: 2;
       position: relative;
-      overflow: hidden;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
     }
 
-    /* Золотой блик поверх карточки */
-    .card-flare {
-      position: absolute;
-      top: 0;
-      left: 0;
+    /* Progress Bar Header */
+    .progress-container {
+      margin-bottom: 30px;
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #a39382;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .progress-bar-bg {
       width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
       height: 100%;
-      background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.18), transparent 60%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 1;
+      width: 25%;
+      background: #d4af37;
+      box-shadow: 0 0 10px #d4af37;
+      transition: width 0.4s ease;
+    }
+
+    /* Step System */
+    .step-content {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    .step-content.active {
+      display: block;
     }
 
     .form-group {
       margin-bottom: 24px;
-      position: relative;
-      z-index: 2;
     }
     label {
       display: block;
@@ -173,12 +145,11 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       color: #a39382;
-      margin-bottom: 8px;
-      font-weight: 500;
+      margin-bottom: 10px;
     }
     input, textarea {
       width: 100%;
-      padding: 14px 16px;
+      padding: 16px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       font-size: 14px;
@@ -193,131 +164,222 @@
       background-color: rgba(255, 255, 255, 0.06);
       box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
     }
-    input::placeholder, textarea::placeholder {
-      color: #55555e;
-      font-weight: 300;
-    }
 
-    button[type="submit"] {
-      width: 100%;
-      background: linear-gradient(135deg, #2a2a30 0%, #151518 100%);
-      color: #ffffff;
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      padding: 16px;
-      margin-top: 10px;
-      font-size: 12px;
+    /* Buttons Navigation */
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .btn {
+      flex: 1;
+      padding: 14px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       font-weight: 500;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
-      position: relative;
-      z-index: 2;
+      text-align: center;
     }
-    button[type="submit"]:hover {
-      background: #d4af37;
+    .btn-secondary {
+      background: transparent;
+      color: #8c8c8c;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .btn-secondary:hover {
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
       color: #0b0b0d;
-      border-color: #d4af37;
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+      border: none;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      transform: translateY(-1px);
     }
 
-    .result {
-      margin-top: 24px;
-      padding: 16px;
-      background: rgba(212, 175, 55, 0.08);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      color: #d4af37;
-      border-radius: 8px;
+    /* VIP PASS GENERATION CARD */
+    .vip-card {
       display: none;
-      text-align: center;
-      font-size: 13px;
-      letter-spacing: 1px;
-      font-family: 'Playfair Display', serif;
-      animation: fadeIn 0.5s ease;
+      border: 1px solid #d4af37;
+      background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.15), rgba(18, 18, 22, 0.95));
+      padding: 30px 25px;
+      border-radius: 12px;
       position: relative;
-      z-index: 2;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+      animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    .vip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .vip-title {
+      font-family: 'Playfair Display', serif;
+      color: #d4af37;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+    .vip-badge {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: rgba(212, 175, 55, 0.2);
+      color: #d4af37;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+    }
+    .vip-body p {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8c8c8c;
+      margin-bottom: 4px;
+    }
+    .vip-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: #ffffff;
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+    .vip-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 10px;
+      color: #a39382;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateX(10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="toast">✦ Draft automatically restored</div>
-
-  <!-- Particles Background -->
+  <!-- Background Particles -->
   <canvas id="particleCanvas"></canvas>
 
-  <!-- Audio Toggle Button -->
+  <!-- Audio Toggle -->
   <button id="audioToggle" class="audio-control">
     <span id="audioIcon">🔇</span> <span id="audioText">SOUND: OFF</span>
   </button>
-
-  <!-- Background Jazz Audio -->
   <audio id="bgMusic" loop preload="auto">
     <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Header -->
   <header>
-    <span class="step-tag">— STEP 01 —</span>
-    <h1>Personal <i>&</i> Educational Profile</h1>
-    <p>Please enter your information to submit the record.</p>
+    <span class="step-tag">— PRIVILEGE MEMBERSHIP —</span>
+    <h1>Personal <i>&</i> Vision Application</h1>
   </header>
 
-  <!-- 3D Card Container -->
-  <div class="card-wrapper">
-    <div class="card" id="tiltCard">
-      <div class="card-flare" id="cardFlare"></div>
-
-      <form id="userForm" action="https://formspree.io/f/xyekkppj" method="POST">
-        
-        <div class="form-group">
-          <label for="fullName">Full Name *</label>
-          <input type="text" id="fullName" name="Full Name" placeholder="e.g. Eleanor Vance" required>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email Address *</label>
-          <input type="email" id="email" name="Email" placeholder="eleanor@example.com" required>
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="Phone" placeholder="+1 (555) 000-0000">
-        </div>
-
-        <div class="form-group">
-          <label for="age">Age</label>
-          <input type="number" id="age" name="Age" min="1" max="120" placeholder="e.g. 19">
-        </div>
-
-        <div class="form-group">
-          <label for="education">Educational Institution</label>
-          <input type="text" id="education" name="Educational Institution" placeholder="e.g. Columbia University / High School">
-        </div>
-
-        <div class="form-group">
-          <label for="comment">Notes / Additional Info</label>
-          <textarea id="comment" name="Notes" rows="3" placeholder="Enter details..."></textarea>
-        </div>
-
-        <button type="submit">Submit Application</button>
-      </form>
-
-      <div id="successMessage" class="result">
-        ✦ Application successfully submitted
+  <div class="card">
+    
+    <!-- Progress Indicator -->
+    <div class="progress-container" id="progressBox">
+      <div class="progress-labels">
+        <span id="stepCounter">STEP 01 / 04</span>
+        <span id="percentCounter">25%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
       </div>
     </div>
+
+    <!-- Form Steps -->
+    <form id="userForm" action="https://formspree.io/f/xyekkppj" method="POST">
+      
+      <!-- STEP 1 -->
+      <div class="step-content active" data-step="1">
+        <div class="form-group">
+          <label for="fullName">01. Full Name *</label>
+          <input type="text" id="fullName" name="Full Name" placeholder="e.g. Eleanor Vance" required>
+        </div>
+        <div class="form-group">
+          <label for="email">02. Email Address *</label>
+          <input type="email" id="email" name="Email" placeholder="eleanor@example.com" required>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-content" data-step="2">
+        <div class="form-group">
+          <label for="phone">03. Phone Number</label>
+          <input type="tel" id="phone" name="Phone" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label for="age">04. Age</label>
+          <input type="number" id="age" name="Age" min="1" max="120" placeholder="e.g. 19">
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-content" data-step="3">
+        <div class="form-group">
+          <label for="education">05. Educational Institution / Company</label>
+          <input type="text" id="education" name="Educational Institution" placeholder="e.g. Columbia University">
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-content" data-step="4">
+        <div class="form-group">
+          <label for="comment">06. Personal Vision & Goals</label>
+          <textarea id="comment" name="Notes" rows="4" placeholder="Share your key goals or details..."></textarea>
+        </div>
+      </div>
+
+      <!-- Step Navigation Controls -->
+      <div class="nav-buttons" id="navButtons">
+        <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">Back</button>
+        <button type="button" class="btn btn-primary" id="nextBtn">Continue</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Complete Record</button>
+      </div>
+
+    </form>
+
+    <!-- VIP PASS RESULT CARD -->
+    <div class="vip-card" id="vipCard">
+      <div class="vip-header">
+        <span class="vip-title">✦ VIP PASS PORTAL</span>
+        <span class="vip-badge">VERIFIED</span>
+      </div>
+      <div class="vip-body">
+        <p>Holder Name</p>
+        <h3 id="vipName">Eleanor Vance</h3>
+        
+        <p>Member Status</p>
+        <h3 style="font-size: 15px; color: #d4af37;">APPROVED ACCESS</h3>
+      </div>
+      <div class="vip-footer">
+        <span>ID: <span id="vipId">#882-990</span></span>
+        <span id="vipDate">OCT 2026</span>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // --- 1. PARTICLES CANVAS ---
+    // --- 1. PARTICLES ---
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -349,9 +411,7 @@
         ctx.fill();
       }
     }
-
-    for (let i = 0; i < 45; i++) particles.push(new Particle());
-
+    for (let i = 0; i < 40; i++) particles.push(new Particle());
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => { p.update(); p.draw(); });
@@ -359,84 +419,73 @@
     }
     animateParticles();
 
-    // --- 2. 3D TILT & FLARE EFFECT ---
-    const tiltCard = document.getElementById('tiltCard');
-    const cardFlare = document.getElementById('cardFlare');
+    // --- 2. STEP SYSTEM & PROGRESS BAR ---
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const stepCounter = document.getElementById('stepCounter');
+    const percentCounter = document.getElementById('percentCounter');
+    const progressFill = document.getElementById('progressFill');
 
     function triggerHaptic() {
-      if (navigator.vibrate) navigator.vibrate(12); // Микро-вибрация
+      if (navigator.vibrate) navigator.vibrate(10);
     }
 
-    function handleMove(clientX, clientY) {
-      const rect = tiltCard.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = ((y - centerY) / centerY) * -10; // Угол наклона по X
-      const rotateY = ((x - centerX) / centerX) * 10;  // Угол наклона по Y
-
-      tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      
-      cardFlare.style.opacity = '1';
-      cardFlare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(212, 175, 55, 0.22), transparent 70%)`;
-    }
-
-    function handleReset() {
-      tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
-      cardFlare.style.opacity = '0';
-    }
-
-    // Для мыши
-    tiltCard.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
-    tiltCard.addEventListener('mouseleave', handleReset);
-
-    // Для сенсорных экранов смартфонов
-    tiltCard.addEventListener('touchmove', (e) => {
-      if (e.touches.length > 0) {
-        handleMove(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    }, { passive: true });
-    tiltCard.addEventListener('touchend', handleReset);
-
-    // --- 3. LOCAL STORAGE (DRAFT SAVER) ---
-    const form = document.getElementById('userForm');
-    const toast = document.getElementById('toast');
-    const formFields = form.querySelectorAll('input, textarea');
-
-    formFields.forEach(field => {
-      field.addEventListener('input', () => {
-        const formData = {};
-        formFields.forEach(f => {
-          if (f.id) formData[f.id] = f.value;
-        });
-        localStorage.setItem('luxFormDraft', JSON.stringify(formData));
-      });
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedDraft = localStorage.getItem('luxFormDraft');
-      if (savedDraft) {
-        const formData = JSON.parse(savedDraft);
-        let hasData = false;
-
-        formFields.forEach(field => {
-          if (field.id && formData[field.id]) {
-            field.value = formData[field.id];
-            hasData = true;
-          }
-        });
-
-        if (hasData) {
-          toast.classList.add('show');
-          setTimeout(() => toast.classList.remove('show'), 3500);
+    function updateStepUI() {
+      document.querySelectorAll('.step-content').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.dataset.step) === currentStep) {
+          step.classList.add('active');
         }
+      });
+
+      // Update progress bar
+      const percent = Math.round((currentStep / totalSteps) * 100);
+      progressFill.style.width = percent + '%';
+      stepCounter.textContent = `STEP 0${currentStep} / 0${totalSteps}`;
+      percentCounter.textContent = percent + '%';
+
+      // Update buttons
+      prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+      if (currentStep === totalSteps) {
+        nextBtn.style.display = 'none';
+        submitBtn.style.display = 'block';
+      } else {
+        nextBtn.style.display = 'block';
+        submitBtn.style.display = 'none';
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      // Валидация полей текущего шага
+      const activeStepInputs = document.querySelectorAll(`.step-content[data-step="${currentStep}"] input`);
+      let valid = true;
+      activeStepInputs.forEach(input => {
+        if (!input.checkValidity()) {
+          input.reportValidity();
+          valid = false;
+        }
+      });
+
+      if (valid && currentStep < totalSteps) {
+        triggerHaptic();
+        currentStep++;
+        updateStepUI();
       }
     });
 
-    // --- 4. AUDIO & SOUNDS ---
+    prevBtn.addEventListener('click', () => {
+      if (currentStep > 1) {
+        triggerHaptic();
+        currentStep--;
+        updateStepUI();
+      }
+    });
+
+    // --- 3. AUDIO & JAZZ ---
     let audioCtx = null;
     let isSoundOn = false;
     const bgMusic = document.getElementById('bgMusic');
@@ -461,73 +510,55 @@
       osc.stop(audioCtx.currentTime + 0.05);
     }
 
-    function playSuccessChord() {
-      if (!isSoundOn || !audioCtx) return;
-      const notes = [523.25, 659.25, 783.99, 1046.50];
-      notes.forEach((freq, idx) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime + idx * 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.1 + 0.7);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(audioCtx.currentTime + idx * 0.1);
-        osc.stop(audioCtx.currentTime + idx * 0.1 + 0.7);
-      });
-    }
-
-    const audioBtn = document.getElementById('audioToggle');
-    audioBtn.addEventListener('click', () => {
+    document.getElementById('audioToggle').addEventListener('click', () => {
       triggerHaptic();
       initAudio();
       isSoundOn = !isSoundOn;
-
       if (isSoundOn) {
         document.getElementById('audioIcon').textContent = '🎷';
         document.getElementById('audioText').textContent = 'JAZZ: ON';
-        audioBtn.style.borderColor = '#d4af37';
-        bgMusic.play().catch(e => console.log("Audio play error:", e));
-        playClickSound();
+        bgMusic.play().catch(() => {});
       } else {
         document.getElementById('audioIcon').textContent = '🔇';
         document.getElementById('audioText').textContent = 'SOUND: OFF';
-        audioBtn.style.borderColor = 'rgba(212, 175, 55, 0.3)';
         bgMusic.pause();
       }
     });
 
-    document.querySelectorAll('input, textarea, button').forEach(element => {
-      element.addEventListener('focus', () => { playClickSound(); triggerHaptic(); });
-      element.addEventListener('click', () => { playClickSound(); triggerHaptic(); });
-    });
-
-    // --- 5. FORM HANDLER ---
-    const successMessage = document.getElementById('successMessage');
+    // --- 4. FORM SUBMIT & VIP PASS GENERATION ---
+    const form = document.getElementById('userForm');
+    const vipCard = document.getElementById('vipCard');
+    const vipName = document.getElementById('vipName');
+    const vipId = document.getElementById('vipId');
+    const vipDate = document.getElementById('vipDate');
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       triggerHaptic();
+
+      const fullNameVal = document.getElementById('fullName').value || 'Eleanor Vance';
       const data = new FormData(event.target);
-      
+
       const response = await fetch(event.target.action, {
         method: form.method,
         body: data,
-        headers: {
-            'Accept': 'application/json'
-        }
+        headers: { 'Accept': 'application/json' }
       });
 
       if (response.ok) {
-        playSuccessChord();
-        successMessage.style.display = 'block';
-        form.reset();
-        localStorage.removeItem('luxFormDraft');
+        // Скрываем форму и прогресс-бар
+        form.style.display = 'none';
+        document.getElementById('progressBox').style.display = 'none';
+        document.getElementById('navButtons').style.display = 'none';
 
-        setTimeout(() => {
-          successMessage.style.display = 'none';
-        }, 5000);
+        // Генерируем VIP карту
+        vipName.textContent = fullNameVal;
+        vipId.textContent = '#' + Math.floor(100000 + Math.random() * 900000);
+        
+        const now = new Date();
+        vipDate.textContent = now.toLocaleString('en-US', { month: 'short' }).toUpperCase() + ' ' + now.getFullYear();
+
+        vipCard.style.display = 'block';
       } else {
         alert("Oops! There was a problem submitting your form");
       }
