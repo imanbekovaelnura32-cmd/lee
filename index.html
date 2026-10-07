@@ -36,7 +36,7 @@
       z-index: 1;
     }
 
-    /* Draft Restore Toast Notification */
+    /* Toast Notification */
     .toast {
       position: fixed;
       top: 20px;
@@ -227,9 +227,9 @@
     <span id="audioIcon">🔇</span> <span id="audioText">SOUND: OFF</span>
   </button>
 
-  <!-- Background Jazz Audio -->
+  <!-- Reliable Jazz Audio Link -->
   <audio id="bgMusic" loop preload="auto">
-    <source src="https://cdn.pixabay.com/download/audio/2022/11/06/audio_40446b52a5.mp3?filename=smooth-jazz-125345.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Header -->
@@ -329,7 +329,6 @@
     const toast = document.getElementById('toast');
     const formFields = form.querySelectorAll('input, textarea');
 
-    // Сохранение данных в памяти браузера при каждом вводе символа
     formFields.forEach(field => {
       field.addEventListener('input', () => {
         const formData = {};
@@ -340,7 +339,6 @@
       });
     });
 
-    // Восстановление данных при загрузке страницы
     window.addEventListener('DOMContentLoaded', () => {
       const savedDraft = localStorage.getItem('luxFormDraft');
       if (savedDraft) {
@@ -412,7 +410,9 @@
         document.getElementById('audioIcon').textContent = '🎷';
         document.getElementById('audioText').textContent = 'JAZZ: ON';
         audioBtn.style.borderColor = '#d4af37';
-        bgMusic.play().catch(() => {});
+        
+        // Попытка запуска с обработкой возможных ошибок
+        bgMusic.play().catch(e => console.log("Audio play error:", e));
         playClickSound();
       } else {
         document.getElementById('audioIcon').textContent = '🔇';
@@ -446,8 +446,6 @@
         playSuccessChord();
         successMessage.style.display = 'block';
         form.reset();
-        
-        // Очищаем черновик из памяти после успешной отправки
         localStorage.removeItem('luxFormDraft');
 
         setTimeout(() => {
