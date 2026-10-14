@@ -2,16 +2,116 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="css/library.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Электронная библиотека</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cormorant+Infant:700&subset=latin,cyrillic">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #F4F1EA; /* Теплый молочно-бежевый фон */
+      color: #2C1A14; /* Глубокий кофейный цвет текста */
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 60px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: #EBE6DC;
+      padding: 50px;
+      border-radius: 6px;
+      border: 1px solid rgba(44, 26, 20, 0.1);
+      box-shadow: 0 20px 40px rgba(44, 26, 20, 0.04);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(44, 26, 20, 0.15);
+      padding-bottom: 25px;
+    }
+
+    .header h1 {
+      font-family: 'Cormorant Infant', serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      color: #2C1A14;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Кнопки-предметы в журнальном стиле */
+    .button {
+      display: block;
+      background-color: #F4F1EA;
+      color: #2C1A14;
+      text-align: left;
+      padding: 16px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(44, 26, 20, 0.12);
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+    }
+
+    .button::after {
+      content: '→';
+      position: absolute;
+      right: 24px;
+      opacity: 0.5;
+      transition: transform 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #2C1A14;
+      color: #F4F1EA;
+      border-color: #2C1A14;
+      transform: translateY(-2px);
+    }
+
+    .button:hover::after {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(44, 26, 20, 0.15);
+      color: #706057;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+  </style>
 </head>
 <body>
+
   <div class="container">
     <div class="header">
       <h1>Электронная библиотека</h1>
     </div>
+
     <div class="content">
       <a href="library/Базы данных.htm" class="button" target="_blank">Базы данных</a>
       <a href="library/Discourse.htm" class="button" target="_blank">Дискурс</a>
@@ -25,10 +125,16 @@
       <a href="library/Введение в специальность.htm" class="button" target="_blank">Введение в специальность</a>
       <a href="library/Компьютерный деловой иностранный язык.htm" class="button" target="_blank">Компьютерный деловой иностранный язык</a>
       <a href="library/Основной иностранный язык для студентов 1 курса.htm" class="button" target="_blank">Основной иностранный язык для студентов 1 курса</a>
+      <a href="library/Основной иностранный язык для студентов 2 курса.htm" class="button" target="_blank">Основной иностранный язык для студентов 2 курса</a>
+      <a href="library/Основной иностранный язык для студентов 3 курса.htm" class="button" target="_blank">Основной иностранный язык для студентов 3 курса</a>
+      <a href="library/Компьютерная технология специальности.htm" class="button" target="_blank">Компьютерная технология специальности</a>
+      <a href="library/История лингвистических наук.htm" class="button" target="_blank">История лингвистических наук</a>
     </div>
+
     <div class="footer">
-      <span class="pfoot">Copyright 2016</span><br>
+      <span>Copyright 2026 — Editorial Collection</span>
     </div>
   </div>
+
 </body>
 </html>
